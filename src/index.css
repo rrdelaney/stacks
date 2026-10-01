@@ -1,0 +1,55 @@
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* No chrome: hide every piece of Excalidraw UI, leaving only the canvas. */
+.excalidraw .layer-ui__wrapper,
+.excalidraw .App-menu,
+.excalidraw .App-bottom-bar,
+.excalidraw .disable-zen-mode,
+.excalidraw .welcome-screen-center,
+.excalidraw .scroll-back-to-content {
+  display: none !important;
+}
+
+.overlay {
+  position: fixed;
+  top: 16px;
+  z-index: 10;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(30, 30, 30, 0.7);
+  color: rgba(255, 255, 255, 0.75);
+  font: 500 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  backdrop-filter: blur(6px);
+}
+
+.timer {
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.timer .count {
+  opacity: 0.5;
+}
+
+.next {
+  right: 16px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.next:hover {
+  background: rgba(60, 60, 60, 0.85);
+  color: #fff;
+}
