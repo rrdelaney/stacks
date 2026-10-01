@@ -8,7 +8,15 @@ const VIEWPORT_ZOOM = 0.9;
 // Slides are the rectangles in the drawing; their order follows the arrows
 // that connect one slide rectangle to the next.
 function orderSlides(elements) {
-  const slides = elements.filter((el) => el.type === "rectangle" && !el.isDeleted);
+  const rects = elements.filter((el) => el.type === "rectangle" && !el.isDeleted);
+  // Rectangles drawn inside another rectangle are slide content, not slides.
+  const contains = (outer, inner) =>
+    outer !== inner &&
+    inner.x >= outer.x &&
+    inner.y >= outer.y &&
+    inner.x + inner.width <= outer.x + outer.width &&
+    inner.y + inner.height <= outer.y + outer.height;
+  const slides = rects.filter((r) => !rects.some((o) => contains(o, r)));
   const slideIds = new Set(slides.map((s) => s.id));
   const next = new Map();
   const hasIncoming = new Set();
