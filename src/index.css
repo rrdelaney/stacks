@@ -43,13 +43,26 @@ body,
   opacity: 0.5;
 }
 
-.next {
+.controls {
   right: 16px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+}
+
+.controls button {
+  min-width: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
-.next:hover {
-  background: rgba(60, 60, 60, 0.85);
+.controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }

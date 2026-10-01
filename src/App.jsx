@@ -47,7 +47,10 @@ export default function App() {
   const [slides, setSlides] = useState([]);
   const [index, setIndex] = useState(0);
   const [remaining, setRemaining] = useState(SLIDE_DURATION_MS);
+  const [paused, setPaused] = useState(false);
   const deadline = useRef(0);
+  const remainingRef = useRef(SLIDE_DURATION_MS);
+  remainingRef.current = remaining;
   const hasShown = useRef(false);
 
   useEffect(() => {
@@ -72,6 +75,10 @@ export default function App() {
 
   const next = useCallback(() => {
     if (slides.length) setIndex((i) => (i + 1) % slides.length);
+  }, [slides.length]);
+
+  const prev = useCallback(() => {
+    if (slides.length) setIndex((i) => (i - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
   // Pan to the current slide and restart its countdown.
@@ -101,15 +108,17 @@ export default function App() {
     };
   }, [api, slides, index]);
 
+  // While paused the countdown is frozen; resuming picks up where it left off.
   useEffect(() => {
-    if (!slides.length) return;
+    if (!slides.length || paused) return;
+    deadline.current = Date.now() + remainingRef.current;
     const tick = setInterval(() => {
       const left = deadline.current - Date.now();
       if (left <= 0) next();
       else setRemaining(left);
     }, 250);
     return () => clearInterval(tick);
-  }, [slides.length, next]);
+  }, [slides.length, next, paused]);
 
   if (!scene) return null;
 
@@ -131,9 +140,20 @@ export default function App() {
               {index + 1}/{slides.length}
             </span>
           </div>
-          <button className="overlay next" onClick={next} aria-label="Next slide">
-            Next →
-          </button>
+          <div className="overlay controls">
+            <button onClick={prev} aria-label="Previous slide">
+              ←
+            </button>
+            <button
+              onClick={() => setPaused((p) => !p)}
+              aria-label={paused ? "Resume" : "Pause"}
+            >
+              {paused ? "▶" : "❚❚"}
+            </button>
+            <button onClick={next} aria-label="Next slide">
+              →
+            </button>
+          </div>
         </>
       )}
     </>
